@@ -51,7 +51,9 @@ class WebServer:
         method, path, _ = request_line
         route, _, query = path.partition('?')
 
-        if route == '/motor-speed':
+        if route == '/ping':
+            return self.success_response(200, { 'success': True })
+        elif route == '/motor-speed':
             return self.handle_motor_speed(query)
         else:
             return self.error_response(404, "Not Found")
@@ -102,6 +104,9 @@ class WebServer:
         return (
             f"HTTP/1.1 {code} OK\r\n"
             f"Content-Type: text/plain\r\n"
+            f"Access-Control-Allow-Origin: *\r\n"
+            f"Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n"
+            f"Access-Control-Allow-Headers: Content-Type\r\n"
             f"Content-Length: {len(message)}\r\n\r\n"
             f"{message}"
         )

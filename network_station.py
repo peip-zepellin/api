@@ -6,6 +6,7 @@ class NetworkStation:
         self.password = password
 
     def connect(self):
+        """
         self.station = network.WLAN(network.STA_IF)
 
         if self.station.isconnected() == True:
@@ -17,7 +18,18 @@ class NetworkStation:
         self.station.connect(self.ssid, self.password)
 
         while self.station.isconnected() == False:
+            print("Waiting for connection")
             pass
+
+        print("Connection successful")
+        print(self.station.ifconfig())
+        """
+        self.station = network.WLAN(network.AP_IF)
+        self.station.active(True)
+        self.station.config(essid=self.ssid, password=self.password)
+
+        #while self.station.isconnected() == False:
+        #    pass
 
         print("Connection successful")
         print(self.station.ifconfig())
