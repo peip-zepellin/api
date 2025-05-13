@@ -1,27 +1,29 @@
 import socket
-from machine import Pin
-from motor_control import Motor
+import json
 
 class WebServer:
     def __init__(self, ip='0.0.0.0', port=80):
-        print('cc')
         self.ip = ip
         self.port = port
-        self.motors = {}
+        self.components = {}
+        self.started = False
 
-    def add_motor(self, id, motor):
-        self.motors[id] = motor
+    def add_component(self, id, component):
+        self.components[id] = component
 
     def start(self):
         self.address = socket.getaddrinfo(self.ip, self.port)[0][-1]
         self.server = socket.socket()
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind(self.address)
-        self.server.listen(5)
+        self.server.listen(512)
 
         print(f"Server running on {self.ip}:{self.port}")
 
-        while True:
+        self.started = True
+
+    def tick(self):
+        if self.started:
             client, addr = self.server.accept()
             print(f"Client connected from {addr}")
             try:
@@ -52,7 +54,7 @@ class WebServer:
         route, _, query = path.partition('?')
 
         if route == '/ping':
-            return self.success_response(200, { 'success': True })
+            return self.success_response(200, json.dumps({ 'success': True }))
         elif route == '/motor-speed':
             return self.handle_motor_speed(query)
         else:
@@ -79,10 +81,10 @@ class WebServer:
         if not 0 <= speed <= 100:
             return self.error_response(400, "Speed must be between 0-100")
 
-        if id not in self.motors.keys():
+        if id not in self.components.keys():
             return self.error_response(400, f"The motor {id} don't exist")
 
-        self.motors[id].set_speed(speed)
+        self.components[id].set_speed(speed)
 
         # Add your motor control logic here
         return self.success_response(200, f"Motor {id} speed set to {speed}")
@@ -123,9 +125,9 @@ class WebServer:
         if self.server:
             self.server.close()
             print("Server stopped")
-        for motor in self.motors.values():
-            motor.stop()
-            motor.deinit()
+        for component in self.components.values():
+            component.stop()
+            component.deinit()
 
 
 if __name__ == "__main__":
