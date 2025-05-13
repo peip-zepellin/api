@@ -1,3 +1,4 @@
+from distance_sensor import DistanceSensor
 from motor_control import Motor
 from gps_serial import GPS
 from network_station import NetworkStation
@@ -12,6 +13,7 @@ def start():
 
     gps = GPS(pin_tx=5, pin_rx=18)
     voltage_sensor = VoltageSensor(pin=Pin(32))
+    distance_sensor = DistanceSensor(trigger_pin=5, echo_pin=18)
     motor1 = Motor(pin=Pin(12, Pin.OUT), debug=True)
     motor2 = Motor(pin=Pin(2, Pin.OUT), debug=True)
     motor3 = Motor(pin=Pin(14, Pin.OUT), debug=True)
@@ -19,6 +21,7 @@ def start():
 
     web_server.add_component('gps', gps) # GPS
     web_server.add_component('voltage_sensor', voltage_sensor) # Voltage Sensor
+    web_server.add_component('distance_sensor', distance_sensor) # Distance Sensor
     web_server.add_component('motor1', motor1) # Left
     web_server.add_component('motor2', motor2) # Right
     web_server.add_component('motor3', motor3) # Front
