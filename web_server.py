@@ -59,8 +59,69 @@ class WebServer:
             return self.handle_motor_speed(query)
         elif route == '/gps-data':
             return self.handle_gps_data(query)
+        elif route == '/battery-level':
+            return self.handle_battery_level(query)
+        elif route == '/distance-sensor':
+            return self.handle_distance_sensor(query)
         else:
             return self.error_response(404, "Not Found")
+
+    def handle_distance_sensor(self, query):
+        params = self.parse_query_string(query)
+        id_values = params.get('id', [])
+
+        try:
+            id = str(id_values[0])
+        except ValueError:
+            return self.error_response(400, "ID must be a string")
+
+        if id not in self.components.keys():
+            return self.error_response(400, f"The distance sensor {id} don't exist")
+
+        sensor = self.components[id]
+
+        return self.success_response(200, sensor.get_distance())
+
+    def handle_battery_level(self, query):
+        params = self.parse_query_string(query)
+        id_values = params.get('id', [])
+
+        try:
+            id = str(id_values[0])
+        except ValueError:
+            return self.error_response(400, "ID must be a string")
+
+        if id not in self.components.keys():
+            return self.error_response(400, f"The voltage sensor {id} don't exist")
+
+        sensor = self.components[id]
+        voltage = sensor.get_voltage()
+        level = 0
+
+        if voltage >= 12.6:
+            level = 100
+        elif voltage >= 12.4:
+            level = 90
+        elif voltage >= 12.2:
+            level = 80
+        elif voltage >= 12.0:
+            level = 70
+        elif voltage >= 11.8:
+            level = 60
+        elif voltage >= 11.6:
+            level = 50
+        elif voltage >= 11.4:
+            level = 40
+        elif voltage >= 11.2:
+            level = 30
+        elif voltage >= 10.8:
+            level = 20
+        elif voltage >= 10.5:
+            level = 10
+        else:
+            level = 0
+
+        return self.success_response(200, level)
 
     def handle_gps_data(self, query):
         params = self.parse_query_string(query)

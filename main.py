@@ -38,7 +38,7 @@ def start():
 
         # Main Loop
         while True:
-            print(voltage_sensor.read_voltage())
+            print(voltage_sensor.get_voltage())
             gps.tick()
             web_server.tick()
 

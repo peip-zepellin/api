@@ -11,7 +11,7 @@ class VoltageSensor:
         self.adc.atten(ADC.ATTN_11DB)  # Allow input voltage up to ~3.3V
         self.adc.width(ADC.WIDTH_12BIT)
 
-    def read_voltage(self):
+    def get_voltage(self):
         adc_value = self.adc.read()
 
         voltage_adc = (adc_value * self.ref_voltage) / self.adc_resolution
