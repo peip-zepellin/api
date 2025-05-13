@@ -28,6 +28,17 @@ class GPS:
                 
         except Exception as e:
             print(f"Une erreur GPS est survenue: {e}")
+
+    def get_data(self):
+        return {
+            'timestamp': self.micropy_gps.timestamp,
+            'date': self.micropy_gps.date_string('long'),
+            'latitude': self.micropy_gps.latitude_string(),
+            'longitude': self.micropy_gps.longitude_string(),
+            'altitude': self.micropy_gps.altitude,
+            'satellites': self.micropy_gps.satellites_in_use,
+            'horizontal_precision_dilution': self.micropy_gps.hdop,
+        }
             
 
     def stop(self):

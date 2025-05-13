@@ -57,8 +57,28 @@ class WebServer:
             return self.success_response(200, json.dumps({ 'success': True }))
         elif route == '/motor-speed':
             return self.handle_motor_speed(query)
+        elif route == '/gps-data':
+            return self.handle_gps_data(query)
         else:
             return self.error_response(404, "Not Found")
+
+    def handle_gps_data(self, query):
+        params = self.parse_query_string(query)
+        id_values = params.get('id', [])
+
+        try:
+            id = str(id_values[0])
+        except ValueError:
+            return self.error_response(400, "ID must be a string")
+
+        if id not in self.components.keys():
+            return self.error_response(400, f"The GPS {id} don't exist")
+
+        gps = self.components[id]
+
+        data = json.dumps(gps.get_data())
+
+        return self.success_response(200, data)
 
     def handle_motor_speed(self, query):
         params = self.parse_query_string(query)
