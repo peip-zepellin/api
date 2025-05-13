@@ -10,20 +10,20 @@ class GPS:
 
     def tick(self):
         try:
-            while serial.any():
-                data = serial.read()
+            while self.serial.any():
+                data = self.serial.read()
                 print(data)
                 for byte in data:
-                    stat = micropy_gps.update(chr(byte))
+                    stat = self.micropy_gps.update(chr(byte))
                     if stat is not None:
                         # Print parsed GPS data
-                        print('UTC Timestamp:', micropy_gps.timestamp)
-                        print('Date:', micropy_gps.date_string('long'))
-                        print('Latitude:', micropy_gps.latitude_string())
-                        print('Longitude:', micropy_gps.longitude_string())
-                        print('Altitude:', micropy_gps.altitude)
-                        print('Satellites in use:', micropy_gps.satellites_in_use)
-                        print('Horizontal Dilution of Precision:', micropy_gps.hdop)
+                        print('UTC Timestamp:', self.micropy_gps.timestamp)
+                        print('Date:', self.micropy_gps.date_string('long'))
+                        print('Latitude:', self.micropy_gps.latitude_string())
+                        print('Longitude:', self.micropy_gps.longitude_string())
+                        print('Altitude:', self.micropy_gps.altitude)
+                        print('Satellites in use:', self.micropy_gps.satellites_in_use)
+                        print('Horizontal Dilution of Precision:', self.micropy_gps.hdop)
                         print()
                 
         except Exception as e:
