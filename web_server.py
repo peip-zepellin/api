@@ -80,7 +80,7 @@ class WebServer:
 
         sensor = self.components[id]
 
-        return self.success_response(200, sensor.get_distance())
+        return self.success_response(200, str(sensor.get_distance()))
 
     def handle_battery_level(self, query):
         params = self.parse_query_string(query)
@@ -121,7 +121,7 @@ class WebServer:
         else:
             level = 0
 
-        return self.success_response(200, level)
+        return self.success_response(200, str(level))
 
     def handle_gps_data(self, query):
         params = self.parse_query_string(query)

@@ -14,10 +14,10 @@ def start():
     gps = GPS(pin_tx=5, pin_rx=18)
     voltage_sensor = VoltageSensor(pin=Pin(32))
     distance_sensor = DistanceSensor(trigger_pin=5, echo_pin=18)
-    motor1 = Motor(pin=Pin(12, Pin.OUT), debug=True)
-    motor2 = Motor(pin=Pin(2, Pin.OUT), debug=True)
-    motor3 = Motor(pin=Pin(14, Pin.OUT), debug=True)
-    motor4 = Motor(pin=Pin(15, Pin.OUT), debug=True)
+    motor1 = Motor(pin=Pin(2, Pin.OUT), debug=True)
+    motor2 = Motor(pin=Pin(15, Pin.OUT), debug=True)
+    motor3 = Motor(pin=Pin(12, Pin.OUT), debug=True)
+    motor4 = Motor(pin=Pin(14, Pin.OUT), debug=True)
 
     web_server.add_component('gps', gps) # GPS
     web_server.add_component('voltage_sensor', voltage_sensor) # Voltage Sensor
